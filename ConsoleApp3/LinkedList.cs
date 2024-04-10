@@ -1,8 +1,11 @@
 ﻿using System;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using System.Collections;
 
-public class CLinkedList<T>
+public class CLinkedList<T>: IEnumerable<T>
 {
-    private class Node
+    protected class Node
     {
         public T Data { get; set; }
         public Node Next { get; set; }
@@ -14,8 +17,8 @@ public class CLinkedList<T>
         }
     }
 
-    private Node head;
-    private int count;
+    protected Node head;
+    protected int count;
 
     public CLinkedList()
     {
@@ -23,7 +26,7 @@ public class CLinkedList<T>
         count = 0;
     }
 
-    public void AddFirst(T data)
+    public virtual void AddFirst(T data)
     {
         Node newNode = new Node(data);
         newNode.Next = head;
@@ -31,7 +34,7 @@ public class CLinkedList<T>
         count++;
     }
 
-    public void AddLast(T data)
+    public virtual void AddLast(T data)
     {
         Node newNode = new Node(data);
 
@@ -91,8 +94,13 @@ public class CLinkedList<T>
         return false;
     }
 
-    public void Print()
+    public virtual void Print()
     {
+        if (head == null)
+        {
+            Console.WriteLine("List is empty");
+            return;
+        }
         Node current = head;
         Console.Write("Linked List elems: ");
         while (current != null)
@@ -128,4 +136,22 @@ public class CLinkedList<T>
         }
         newArray[count - 1].Next = null;
     }
+    public IEnumerator<T> GetEnumerator()
+    {
+        var temp = head;
+        do
+        {
+            yield return temp.Data; 
+            temp = temp.Next;
+        } while (true);
+        
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+
 }
+
